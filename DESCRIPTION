@@ -1,0 +1,18 @@
+Package: ARM.IWW
+Title: Multi-site stochastic rainfall model based on an alternating renewal process
+Version: 0.0.0.9000
+Authors@R: 
+    person("Ross", "Pidoto", , "pidoto@iww.uni-hannover.de", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7471-2615"))
+Description: What the package does (one paragraph).
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.1
+Imports: 
+    copula,
+    lmomco,
+    lubridate,
+Depends: 
+    data.table
