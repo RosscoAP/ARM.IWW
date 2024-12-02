@@ -1,10 +1,11 @@
 # What directory contains the observed CDC data?
 CDCdir <- "C:/Users/Pidoto/Desktop/ARM-R-Library/CDC-Input/"
 # Set the working directory. This is where the data will be saved to
-setwd("C:/Users/Pidoto/Desktop/ARM-R-Library/Output/") 
+setwd("C:/Users/Pidoto/Desktop/ARM-R-Library/Output/")
 
-library(data.table) # required to be loaded for ARM.IWW
-library(ARM.IWW) # load the package
+# The following two lines should be left commented out if you are testing locally using Load_Src_Locally.R
+#library(data.table) # required to be loaded for ARM.IWW
+#library(ARM.IWW) # load the package - not needed if running functions locally for development
 
 # Collection of stations around Hannover (station 2014)
 Stations <- as.character(c(294,2011,2014,5382))
@@ -30,16 +31,16 @@ for (Station in Stations) {
   Marginals <- fit_marginals(Station) # Returns a list of distribution parameters
   Copulas <- fit_copulas(Station) # Returns a list of copula parameters
 }
-# As the Callau uses a regional empirical copula for WSA-WSD, 
+# As the Callau uses a regional empirical copula for WSA-WSD,
 # the individual copulas of all stations need to be defined before synthesis
-for (Station in Stations[1]) {
+for (Station in Stations) {
   External <- gen_external(Station, Years = 100, RegEmpCopula = Stations) # returns the external time series
   Internal <- gen_internal(Station, Years = 100) # returns the internal time series in units of 1/100th mm
 }
 
 # Now run the model in the Pidoto mode
 set_model_type("Pidoto")
-for (Station in Stations[1]) {
+for (Station in Stations) {
   Marginals <- fit_marginals(Station) # Returns a list of distribution parameters
   Copulas <- fit_copulas(Station) # Returns a list of copula parameters
   External <- gen_external(Station, Years = 100) # returns the external time series
