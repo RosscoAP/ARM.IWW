@@ -143,12 +143,13 @@ gen_external <- function(StationID,
   # Create a data frame for export
   External <- data.frame(
     Date = as.POSIXct(TS.startDateTime[1:idx], origin="1970-01-01", tz="UTC"),
+    Year = TS.year[1:idx],
+    Season = returnSeason(as.POSIXct(TS.startDateTime[1:idx], origin="1970-01-01", tz="UTC")),
     WSD = TS.wsd[1:idx],
     WSD_Pval = TS.wsd_pval[1:idx],
     DSD = TS.dsd[1:idx],
     WSA = TS.wsa[1:idx],
-    WSI = TS.wsi[1:idx],
-    Year = TS.year[1:idx]
+    WSI = TS.wsi[1:idx]
   )
 
   # Write the data frame to disk

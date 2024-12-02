@@ -21,7 +21,6 @@ gen_internal <- function(StationID,
                         ModelType = get_model_type()
                         ) {
 
-  # TODO: check parameters
   set_model_type(ModelType)
 
   # Hard coded parameter
@@ -154,7 +153,7 @@ gen_internal <- function(StationID,
   # Write the data frame to disk
   if (saveObjects) {
     # Save the external structure again to disk with extra information needed for wet spell peaks
-    External <- Events[,c("Date","WSD","WSD_Pval","DSD","WSA","WSI","Year","WSP","WSPT")] # to conform with previous naming
+    External <- Events[,c("Date","Year","Season","WSD","WSD_Pval","DSD","WSA","WSI","WSP","WSPT")] # to conform with previous naming
     save(External, file=paste0("External/",armParTextExt(),"/",StationID,"-",ifelse(is.na(Realisation),"",paste0(pad0s(Realisation),"-")),Years,"yrs.RData"))
     rm(External) # remove temporary object
     ##### Create data.frame to store output time series
