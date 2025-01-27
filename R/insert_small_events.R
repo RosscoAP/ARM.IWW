@@ -156,9 +156,9 @@ insert_small_events <- function(StationID,
 
   # Write the data frame to disk
   if (saveObjects) {
-    if (!dir.exists("SmallEvents/")) dir.create("SmallEvents/")
-    if (!dir.exists(paste0("SmallEvents/",armParTextExt(),"/"))) dir.create(paste0("SmallEvents/",armParTextExt(),"/"))
-    save(Internal, file=paste0("SmallEvents/",armParTextExt(),"/",StationID,"-",ifelse(is.na(Realisation),"",paste0(pad0s(Realisation),"-")),Years,"yrs.RData"), compress = "xz")
+    if (!dir.exists("Small_Events/")) dir.create("Small_Events/")
+    if (!dir.exists(paste0("Small_Events/",armParTextExt(),"/"))) dir.create(paste0("Small_Events/",armParTextExt(),"/"))
+    save(Internal, file=paste0("Small_Events/",armParTextExt(),"/",StationID,"-",ifelse(is.na(Realisation),"",paste0(pad0s(Realisation),"-")),Years,"yrs.RData"), compress = "xz")
   }
 
   endTime <- Sys.time()
