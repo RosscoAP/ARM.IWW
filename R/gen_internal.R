@@ -29,11 +29,11 @@ gen_internal <- function(StationID,
   InternalResolution <- 1 # [min]
   nSamples <- 1e6 # how many samples should be generated for the numerical implementation of cCopula
 
-  print.noquote(paste("## Generate internal time series: ", StationID, "##"))
+  print.noquote(paste("## Generate internal time series:", StationID, "##"))
   startTime <- Sys.time()
 
   # Load the external structure of the time series
-  Events <- loadRObject(file=paste0("External/",armParTextExt(),"/",StationID,"-",ifelse(is.na(Realisation),"",paste0(pad0s(Realisation),"-")),Years,"yrs.RData"))
+  Events <- loadRObject(paste0("External/",armParTextExt(),"/",StationID,"-",ifelse(is.na(Realisation),"",paste0(pad0s(Realisation),"-")),Years,"yrs.RData"))
   totalLength <- (sum(Events$DSD)+sum(Events$WSD))/arm$Aggregation # in timesteps
 
   # Create blank columns within Events
@@ -50,9 +50,9 @@ gen_internal <- function(StationID,
 
     for (Season in c("S","W")) { # loop around seasons
       # Load objects
-      WSP_Copula <- loadRObject(file=paste0("Copulas/WSP/",armParTextExt(),"/",StationID,"-",Season,".RData"))
-      WSP_PD <- loadRObject(file=paste0("Marginals/WSP/",armParTextExt(),"/",StationID,"-",Season,".RData"))
-      WSI_PD <- loadRObject(file=paste0("Marginals/WSI/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+      WSP_Copula <- loadRObject(paste0("Copulas/WSP/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+      WSP_PD <- loadRObject(paste0("Marginals/WSP/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+      WSI_PD <- loadRObject(paste0("Marginals/WSI/",armParTextExt(),"/",StationID,"-",Season,".RData"))
       # In the Callau model, we calculate back from WSI
       WSI_CummProb <- lmomco::plmomco(Events$WSI[Events$Season==Season & Events$WSD!=arm$Aggregation], WSI_PD)
       pVals <- copula::cCopula(cbind((WSI_CummProb), runif(length(WSI_CummProb))), copula = WSP_Copula, inverse = T, indices = 2)
@@ -77,8 +77,8 @@ gen_internal <- function(StationID,
     # Loop around Seasons (and seasons) and generate a large number of sample Copula values
     for (Season in c("S","W")) {
       # Load the WSP/WSI Copula and marginal distributions
-      WSP_Copula <- loadRObject(file=paste0("Copulas/WSP/",armParTextExt(),"/",StationID,"-",Season,".RData"))
-      WSP_WSA_PD <- loadRObject(file=paste0("Marginals/WSP_WSA/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+      WSP_Copula <- loadRObject(paste0("Copulas/WSP/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+      WSP_WSA_PD <- loadRObject(paste0("Marginals/WSP_WSA/",armParTextExt(),"/",StationID,"-",Season,".RData"))
       # generate randome samples across the entire 2D unit space
       pSim <- data.table::as.data.table(copula::rCopula(nSamples, WSP_Copula))
       colnames(pSim) <- c("U","V") # U: WSD, V; WSP_WSA
@@ -159,7 +159,7 @@ gen_internal <- function(StationID,
     ##### Create data.frame to store output time series
     Internal <- data.frame(
       Pcp = double(totalLength), # Set Pcp first to zero. This will account for the DSDs. Later the WSDs will be overwritten
-      Year = as.integer(lubridate::year(seq(Events$Date[1], by=paste(arm$Aggregation,"mins"), length.out=totalLength))+1) # check the +1 bit in this line
+      Year = as.integer(lubridate::year(seq(Events$Date[1], by=paste(arm$Aggregation,"mins"), length.out=totalLength)))
     )
     # Determine the start and end indexes for each wet event
     Events$startIndex <- (as.numeric(Events$Date)-as.numeric(Events$Date[1]))/(60*arm$Aggregation)+1

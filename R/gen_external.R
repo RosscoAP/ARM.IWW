@@ -28,7 +28,7 @@ gen_external <- function(StationID,
   # Roughly how many samples should be generated in order to fill the simulation period?
   numSamples <- 400*Years # better higher than lower
 
-  print.noquote(paste("## Generate external time series: ", StationID, "##"))
+  print.noquote(paste("## Generate external time series:", StationID, "##"))
   startTime <- Sys.time()
 
   # work out start and end dates
@@ -47,13 +47,13 @@ gen_external <- function(StationID,
   for (Season in c("S","W")) {
 
     # Load the marginal distributions
-    PD_DSD <- loadRObject(file=paste0("Marginals/DSD/",armParTextExt(),"/",StationID,"-",Season,".RData"))
-    PD_WSA <- loadRObject(file=paste0("Marginals/WSA/",armParTextExt(),"/",StationID,"-",Season,".RData"))
-    PD_WSD <- loadRObject(file=paste0("Marginals/WSD/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+    PD_DSD <- loadRObject(paste0("Marginals/DSD/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+    PD_WSA <- loadRObject(paste0("Marginals/WSA/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+    PD_WSD <- loadRObject(paste0("Marginals/WSD/",armParTextExt(),"/",StationID,"-",Season,".RData"))
 
     # Load Copulas
     if (isPidoto()) { # Khoudraji Gumbel Copula
-      copulaWSI <- loadRObject(file=paste0("Copulas/WSI/",armParTextExt(),"/",StationID,"-",Season,".RData"))
+      copulaWSI <- loadRObject(paste0("Copulas/WSI/",armParTextExt(),"/",StationID,"-",Season,".RData"))
       # Generate n number of samples from the Copula
       WSA_WSD[[Season]] <- copula::rCopula(ceiling(numSamples*0.5), copulaWSI) # 0.5 as each season is half the year
     }

@@ -4,8 +4,12 @@ CDCdir <- "C:/Users/Pidoto/Desktop/ARM-R-Library/CDC-Input/"
 setwd("C:/Users/Pidoto/Desktop/ARM-R-Library/Output/")
 
 # The following two lines should be left commented out if you are testing locally using Load_Src_Locally.R
-#library(data.table) # required to be loaded for ARM.IWW
-#library(ARM.IWW) # load the package - not needed if running functions locally for development
+library(data.table) # required to be loaded for ARM.IWW
+library(ARM.IWW) # load the package - not needed if running functions locally for development
+
+# If also wanting to insert small events, the following two lines are required
+library(Rcpp)
+sourceCpp("C:/Users/pidoto/Desktop/ARM-R-Library/ARM.IWW/Small_Events_Rcpp.cpp")
 
 # Collection of stations around Hannover (station 2014)
 Stations <- as.character(c(294,2011,2014,5382))
@@ -23,6 +27,8 @@ for (Station in Stations) {
   Obs <- load_CDC(Station, sourceDir = CDCdir, includeRecent = F)
   # Perform the event definition from observations
   Events <- get_events(Obs, Station)
+  # Also determine small events
+  Events <- get_events(Obs, Station, SmallEventsMode = T)
 }
 
 # First run the model in the Callau mode
@@ -36,6 +42,7 @@ for (Station in Stations) {
 for (Station in Stations) {
   External <- gen_external(Station, Years = 100, RegEmpCopula = Stations) # returns the external time series
   Internal <- gen_internal(Station, Years = 100) # returns the internal time series in units of 1/100th mm
+  SmallEvents <- insert_small_events(Station, Years = 100) # returns the internal time series with small events added in units of 1/100th mm
 }
 
 # Now run the model in the Pidoto mode
@@ -45,11 +52,13 @@ for (Station in Stations) {
   Copulas <- fit_copulas(Station) # Returns a list of copula parameters
   External <- gen_external(Station, Years = 100) # returns the external time series
   Internal <- gen_internal(Station, Years = 100) # returns the internal time series in units of 1/100th mm
+  SmallEvents <- insert_small_events(Station, Years = 100) # returns the internal time series with small events added in units of 1/100th mm
 }
 
 # It is also possible to create realisations of simulations, by including the realisation argument
 External <- gen_external("2014", Years = 100, Realisation = 1) # returns the external time series
 Internal <- gen_internal("2014", Years = 100, Realisation = 1) # returns the internal time series in units of 1/100th mm
+SmallEvents <- insert_small_events(Station, Years = 100, Realisation = 1) # returns the internal time series with small events added in units of 1/100th mm
 
 # It is also possible to override the current model type (see get_model_type()) by using the ModelType argument
 # Applies to the functions fit_copulas(), fit_marginals(), gen_external() and gen_internal()

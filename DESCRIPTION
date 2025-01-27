@@ -1,6 +1,6 @@
 Package: ARM.IWW
 Title: Multi-site stochastic rainfall model based on an alternating renewal process
-Version: 0.0.0.9000
+Version: 0.0.0.91
 Authors@R: 
     person("Ross", "Pidoto", , "pidoto@iww.uni-hannover.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7471-2615"))
