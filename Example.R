@@ -7,7 +7,7 @@ setwd("C:/Users/Pidoto/Desktop/ARM-R-Library/Output/")
 library(data.table) # required to be loaded for ARM.IWW
 library(ARM.IWW) # load the package - not needed if running functions locally for development
 
-# If also wanting to insert small events, the following two lines are required
+# If also wanting to insert small events, the following three lines are required
 library(Rcpp)
 library(devtools)
 sourceCpp("C:/Users/pidoto/Desktop/ARM-R-Library/ARM.IWW/Small_Events_Rcpp.cpp")
