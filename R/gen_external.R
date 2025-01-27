@@ -56,6 +56,7 @@ gen_external <- function(StationID,
       copulaWSI <- loadRObject(paste0("Copulas/WSI/",armParTextExt(),"/",StationID,"-",Season,".RData"))
       # Generate n number of samples from the Copula
       WSA_WSD[[Season]] <- copula::rCopula(ceiling(numSamples*0.5), copulaWSI) # 0.5 as each season is half the year
+      rm(copulaWSI) # object no longer needed
     }
     if (isCallau()) { # Regional Empirical Copula
       # Matrix to hold copula values
@@ -76,7 +77,6 @@ gen_external <- function(StationID,
     WSA[[Season]] <- lmomco::qlmomco(WSA_WSD[[Season]][,1], PD_WSA)
     # Generate also DSD samples which are independent from wetspells
     DSD[[Season]] <- lmomco::rlmomco(ceiling(numSamples*0.5), PD_DSD) # 0.5 as each season is half the year
-    rm(copulaWSI) # object no longer needed
 
     # Round the times to the specified output timestep
     WSD[[Season]] <- round(WSD[[Season]]/arm$Aggregation,0)*arm$Aggregation

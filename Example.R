@@ -9,6 +9,7 @@ library(ARM.IWW) # load the package - not needed if running functions locally fo
 
 # If also wanting to insert small events, the following two lines are required
 library(Rcpp)
+library(devtools)
 sourceCpp("C:/Users/pidoto/Desktop/ARM-R-Library/ARM.IWW/Small_Events_Rcpp.cpp")
 
 # Collection of stations around Hannover (station 2014)
@@ -58,7 +59,7 @@ for (Station in Stations) {
 # It is also possible to create realisations of simulations, by including the realisation argument
 External <- gen_external("2014", Years = 100, Realisation = 1) # returns the external time series
 Internal <- gen_internal("2014", Years = 100, Realisation = 1) # returns the internal time series in units of 1/100th mm
-SmallEvents <- insert_small_events(Station, Years = 100, Realisation = 1) # returns the internal time series with small events added in units of 1/100th mm
+SmallEvents <- insert_small_events("2014", Years = 100, Realisation = 1) # returns the internal time series with small events added in units of 1/100th mm
 
 # It is also possible to override the current model type (see get_model_type()) by using the ModelType argument
 # Applies to the functions fit_copulas(), fit_marginals(), gen_external() and gen_internal()
